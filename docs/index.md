@@ -21,9 +21,9 @@
 The following examples help illustrate the syntax
 of the Pattern programming language.
 
-[Application Scope](#application-scope-keyword)
-[Needs](#needs-keyword)
-[Application](#application-keyword)
+* [Application Scope](#application-scope-keyword)
+* [Needs](#needs-keyword)
+* [Application](#application-keyword)
 
 
 ### Application Scope Keyword
