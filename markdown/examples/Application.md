@@ -11,6 +11,8 @@ and methods can be accessed anywhere in the application without referencing the
 The `End Application` keyword is used to denote the end of the `Application`
 object's definition.
 
+> __Note:__ There can be only one `Application` object per [`Application Scope`](#Application-Scope-Keyword).
+
 ```pattern
 Application Scope My::App
 
