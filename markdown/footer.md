@@ -1,2 +1,5 @@
+[Return to top](#pattern-programming-language)
 
-_&copy; 2018 - 2019 - Gateway Programming School, Inc._
+---
+
+!include(license.md)

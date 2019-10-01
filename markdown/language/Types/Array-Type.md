@@ -26,7 +26,7 @@ An `Array` has a property named `Anchor` that allows the indices to be an offset
 
 ```pattern
     // Define an Array of Number using an Array initializer
-    Const values = { 0, 1.1, 2.2, 3.3, 4 }
+    Const values = (0, 1.1, 2.2, 3.3, 4)
 
     Console.WriteLine($"Array(0): ${values(0)}")
     // Result: "Array(0): 0"

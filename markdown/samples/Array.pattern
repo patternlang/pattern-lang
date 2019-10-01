@@ -1,0 +1,33 @@
+Application Scope PatternLang
+
+Needs Static System.Console
+
+Application Array
+    Start
+        Parameter args Of Array Of String
+        
+        Match args.Length
+            0 |> _ => WriteLine("No input provided.")
+            1 |> _ => WriteLine(args.First)
+            2 |> _ => WriteLine(args.Last)
+            Some |> 
+                (length) => 
+                Lambda
+                    WriteLine($"{length} arguments provided on command line.")
+                    WriteLine(args.Find("Hello", CompareType.StartsWith))
+                
+                    Match args.Filter("Hello", CompareType.StartsWith)
+                        "Hello, World" |> (match) => WriteLine("Hello, World with comma.")
+                        "Hello World" |> (match) => WriteLine("Hello World without comma.")
+                        Some |> (matches) => matches.ForEach(match => WriteLine(match))
+                        None |> _ => WriteLine("Nothing to include.")
+                    
+                
+                    Match args.Exclude("Hello", CompareType.StartsWith)
+                        Some |> (matches) => matches.ForEach(match => WriteLine(match))
+                        None |> _ => WriteLine("Nothing to exclude.")
+                    
+                End Lambda
+            None |> WriteLine("args is not defined.")
+    End Start
+End HelloWorld

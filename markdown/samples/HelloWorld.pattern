@@ -1,0 +1,9 @@
+Application Scope PatternLang
+
+Needs Static System.Console
+
+Application HelloWorld
+    Start
+        WriteLine("Hello, World.")    
+    End Start
+End HelloWorld

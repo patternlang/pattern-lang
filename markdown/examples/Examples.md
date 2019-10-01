@@ -3,7 +3,7 @@
 The following examples help illustrate the syntax
 of the Pattern programming language.
 
-#### Pattern Keyword Examples
+### Pattern Keyword Examples
 
 * [Application Scope](#Application-Scope-Keyword)
 * [Needs](#Needs-Keyword)
@@ -11,11 +11,13 @@ of the Pattern programming language.
 * [End](#End-Keyword)
 * [Register](#Register-Keyword)
 
-#### Pattern Types Examples
+### Pattern Types Examples
 
 * [Injection Set](#Injection-Set-Type)
 * [Controller](#Controller-Type)
 * [View](#View-Type)
+
+[Return to top](#pattern-programming-language)
 
 !include(ApplicationScope-Example.md)
 !include(Needs-Example.md)
