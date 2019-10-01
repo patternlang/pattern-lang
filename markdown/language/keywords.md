@@ -5,3 +5,5 @@
 * [Application](#Application-Keyword)
 * [End](#End-Keyword)
 * [Register](#Register-Keyword)
+
+[Return to top](#pattern-programming-language)

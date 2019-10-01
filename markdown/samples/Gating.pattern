@@ -1,0 +1,90 @@
+Application Scope PatternLang
+
+Needs Static System.Console
+
+Application Gating
+    Const _filename = "-Filename"
+    Const _action = "-Action"
+
+    // Specifying Array because default notation of (_filename, _action)
+    // would be interpreted as a Pair.
+    Const _validParameters = Array(_filename, _action)
+
+    // Our entry point method
+    Start
+        Parameters args Of Array Of String
+
+        Const parameters = ParseParameters(args)
+
+        // Validity requires there be only two parameters, one for -Filename
+        // and one for -Action
+        Const hasValidParameters = 
+            // The Find and Exclude methods will project over any collection passed as the first argument
+            parameters.Find(_validParameters, CompareType.Equals).Length == _validParameters.Length            
+            && parameters.Exclude(_validParameters, CompareType.Equals).Length == 0
+
+        // Match is used to compare values, whether they are atomic or a collection.
+        // In the event of a collection, the collection is enumerated and the 
+        // matched value is the value of the current iteration.
+        Match hasValidParameters
+                    // The parameter to the lambda is always the value that was matched
+            true |> _ => parameters.ForEach(p => WriteLine($"{p.Key}: {p.Value}"))
+            false |> _ =>
+                Match parameters
+                    Some |> p =>
+                        Match p.Key
+                            _filename |> _ => WriteLine($"Filename: {p.Value}")
+                            _action |> _ => WriteLine($"Action: {p.Value}")
+                            Some |> _ => WriteLine($"Unknown parameter: {p}")
+                            None |> _ => WriteLine($"Missing Key for ({p.Value})")
+
+                    None |> _ => WriteLine("No parameters provided.")
+
+            None |> Continue
+
+    End Start
+
+    Method ParseParameters Of Array Of Pair(Key Of String, Value of String)
+        Parameters args of Array of String
+
+        Mutable results Array of Pair(Key of String, Value of String)
+        Mutable word Of String
+
+        Match args
+            // Matches only the values that start with "-"
+            ("-", CompareType.StartsWith) |> parameter => 
+                    Match parameter
+                        (":", CompareType.Contains)
+                        ("=", CompareType.Contains)
+                            |>  Lambda _ =>                                 
+                                    Const split = parameter.Split(":").ForEach(p => p.Trim)
+                                    result.Add((Key = split(0), Value = split(1))
+                                    word = None 
+                                End Lambda
+                        Some |> Lambda _ => 
+                                    Match word
+                                        Some |> _ => result.Add((Key = word, Value = None))
+                                        None |> Continue
+
+                                    word = parameter
+                        None |> Continue
+
+            // Matches all values that don't start with "-"
+            Some |> parameter =>
+                    Match word
+                        Some |> Lambda _ =>                             
+                                    result.Add((Key = word, Value = parameter))
+                                    word = None
+                                End Lambda
+                        None |> Continue
+
+            // The args collection is empty.
+            None |> Continue
+
+        Match word
+            Some |> _ => result.Add((Key = word, Value = None))
+            None |> Continue
+
+        Return results
+    End ParseParameters
+End HelloWorld

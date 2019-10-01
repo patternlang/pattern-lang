@@ -1,3 +1,7 @@
+<a name="Language-Concepts"></a>
+
 ## Language Concepts
 
-!include(Dependency-Injection.md)
+!include(Language-Paradigms.md)
+
+[Return to top](#pattern-programming-language)
