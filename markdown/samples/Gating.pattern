@@ -61,12 +61,14 @@ Application Gating
                                     result.Add((Key = split(0), Value = split(1))
                                     word = None 
                                 End Lambda
-                        Some |> Lambda _ => 
+                        Some |> Lamba _ => 
                                     Match word
                                         Some |> _ => result.Add((Key = word, Value = None))
                                         None |> Continue
 
                                     word = parameter
+                                End Lambda
+                                
                         None |> Continue
 
             // Matches all values that don't start with "-"
