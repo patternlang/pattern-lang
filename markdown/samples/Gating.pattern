@@ -19,8 +19,8 @@ Application Gating
         // Validity requires there be only two parameters, one for -Filename
         // and one for -Action
         Const hasValidParameters = 
-            // The Find and Exclude methods will project over any collection passed as the first argument
-            parameters.Find(_validParameters, CompareType.Equals).Length == _validParameters.Length            
+            // The Filter and Exclude methods will project over any collection passed as the first argument
+            parameters.Filter(_validParameters, CompareType.Equals).Length == _validParameters.Length            
             && parameters.Exclude(_validParameters, CompareType.Equals).Length == 0
 
         // Match is used to compare values, whether they are atomic or a collection.

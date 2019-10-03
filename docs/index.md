@@ -38,12 +38,12 @@
 
 ### Paradigms of Pattern Lang
 
-Pattern is designed to designed to allow programmers to utilize modern Functional
-paradigms in an Object Oriented environment that encourages best practices of
-both application design and the code written to accomplish the goals of the
-application itself.
-
 _Object Oriented and Functional are not mutually exclusive paradigms for programming._
+
+Pattern is designed to allow programmers to utilize modern Functional
+paradigms in an Object Oriented environment that encourages best practices of
+both application designs and the code written to accomplish the goals of the
+application itself.
 
 Pattern includes foundational objects to inherit from that allow you to create full
 applications that apply industry standard patterns and practices such as Model View
@@ -73,7 +73,7 @@ to them via IEnumerable<T>.
 * `Exclude` - Iterates over each value collection and calls the specified
     `Expression<T, Boolean>`, returning T when the expression is false.
 * `Sort` - Iterates over each value and sorts the data using the supplied 
-    Sorter<T> instance, returning the sorted data as a new collection of the
+    `IComparer<T>` instance, returning the sorted data as a new collection of the
     same type.
 
 <a name="return-types"></a>
@@ -115,25 +115,30 @@ End Select
 const strings =
     values.Select(value => value.ToString())
 
+// Test For Even Number
+Expression IsEven(value Of Number) Of Boolean
+    value % 2 == 0
+End IsEven
+
 // Block Style
 Filter values Into even
-    value => (value % 2 == 0)
+    value => IsEven(value)
 End Filter
 
 // Fluent Style
 const even = 
-    values.Filter(value => (value % 2 == 0))
+    values.Filter(value => IsEven(value))
 
 // even = (0, 2, 4, 6, 8, 0xA, 0xC, 0xE)
 
 // Block Style
 Exclude values Into odd
-    value => (value % 2 == 0)
+    value => IsEven(value)
 End Exclude
 
 // Fluent Style
 const even = 
-    values.Filter(value => (value % 2 == 0))
+    values.Filter(value => IsEven(value))
 
 // odd = (1, 3, 5, 7, 9, 0xB, 0xD, 0xF)
 
@@ -736,8 +741,8 @@ Application Gating
         // Validity requires there be only two parameters, one for -Filename
         // and one for -Action
         Const hasValidParameters = 
-            // The Find and Exclude methods will project over any collection passed as the first argument
-            parameters.Find(_validParameters, CompareType.Equals).Length == _validParameters.Length            
+            // The Filter and Exclude methods will project over any collection passed as the first argument
+            parameters.Filter(_validParameters, CompareType.Equals).Length == _validParameters.Length            
             && parameters.Exclude(_validParameters, CompareType.Equals).Length == 0
 
         // Match is used to compare values, whether they are atomic or a collection.

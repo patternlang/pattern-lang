@@ -16,7 +16,7 @@ to them via IEnumerable<T>.
 * `Exclude` - Iterates over each value collection and calls the specified
     `Expression<T, Boolean>`, returning T when the expression is false.
 * `Sort` - Iterates over each value and sorts the data using the supplied 
-    Sorter<T> instance, returning the sorted data as a new collection of the
+    `IComparer<T>` instance, returning the sorted data as a new collection of the
     same type.
 
 #### Return Types
@@ -54,25 +54,30 @@ End Select
 const strings =
     values.Select(value => value.ToString())
 
+// Test For Even Number
+Expression IsEven(value Of Number) Of Boolean
+    value % 2 == 0
+End IsEven
+
 // Block Style
 Filter values Into even
-    value => (value % 2 == 0)
+    value => IsEven(value)
 End Filter
 
 // Fluent Style
 const even = 
-    values.Filter(value => (value % 2 == 0))
+    values.Filter(value => IsEven(value))
 
 // even = (0, 2, 4, 6, 8, 0xA, 0xC, 0xE)
 
 // Block Style
 Exclude values Into odd
-    value => (value % 2 == 0)
+    value => IsEven(value)
 End Exclude
 
 // Fluent Style
 const even = 
-    values.Filter(value => (value % 2 == 0))
+    values.Filter(value => IsEven(value))
 
 // odd = (1, 3, 5, 7, 9, 0xB, 0xD, 0xF)
 
