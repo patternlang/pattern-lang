@@ -27,7 +27,7 @@ Application Gating
         // In the event of a collection, the collection is enumerated and the 
         // matched value is the value of the current iteration.
         Match hasValidParameters
-                    // The parameter to the lambda is always the value that was matched
+                    // The parameter to the Action is always the value that was matched
             true |> _ => parameters.ForEach(p => WriteLine($"{p.Key}: {p.Value}"))
             false |> _ =>
                 Match parameters
@@ -56,28 +56,28 @@ Application Gating
                     Match parameter
                         (":", CompareType.Contains)
                         ("=", CompareType.Contains)
-                            |>  Lambda _ =>                                 
+                            |>  Action _ =>                                 
                                     Const split = parameter.Split(":").ForEach(p => p.Trim)
                                     result.Add((Key = split(0), Value = split(1))
                                     word = None 
-                                End Lambda
-                        Some |> Lamba _ => 
+                                End Action
+                        Some |> Action _ => 
                                     Match word
                                         Some |> _ => result.Add((Key = word, Value = None))
                                         None |> Continue
 
                                     word = parameter
-                                End Lambda
+                                End Action
                                 
                         None |> Continue
 
             // Matches all values that don't start with "-"
             Some |> parameter =>
                     Match word
-                        Some |> Lambda _ =>                             
+                        Some |> Action _ =>                             
                                     result.Add((Key = word, Value = parameter))
                                     word = None
-                                End Lambda
+                                End Action
                         None |> Continue
 
             // The args collection is empty.
@@ -89,4 +89,4 @@ Application Gating
 
         Return results
     End ParseParameters
-End HelloWorld
+End Gating

@@ -15,3 +15,5 @@ Controller, Adapter, Facade and Strategy Patterns.  Within the code you will use
 immutable Models and Records that include automatic versioning and state tracking.
 [Dependency Injection](#DI) provides modern amenities such as loose coupling that
 allows for strong cohesion between data and logic.
+
+[Return to top](#pattern-programming-language)

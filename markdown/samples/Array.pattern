@@ -30,4 +30,4 @@ Application Array
                 End Lambda
             None |> WriteLine("args is not defined.")
     End Start
-End HelloWorld
+End Array

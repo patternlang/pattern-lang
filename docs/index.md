@@ -7,6 +7,7 @@
 * [Pattern Programming Language](#pattern-programming-language)
   * [Language Concepts](#Language-Concepts)
     * [Paradigms of Pattern Lang](#Language-Paradigms)
+    * [Projections](#Projections)
   * [Language Definition](#language-definition)
     * [Pattern Keywords](#pattern-keywords)
     * [Basic Types](#BasicTypes)
@@ -19,6 +20,10 @@
     * [Application Keyword](#application-keyword)
     * [End Keyword](#end-keyword)
     * [Register Keyword](#register-keyword)
+  * [Sample Programs](#sample-programs)
+    * [Hello World Sample](#hello-world-sample)
+    * [Array Sample](#array-sample)
+    * [Gating Sample](#gating-sample)
 
 <!-- toc! -->
 
@@ -26,6 +31,8 @@
 <a name="Language-Concepts"></a>
 
 ## Language Concepts
+
+[Return to top](#pattern-programming-language)
 
 <a name="Language-Paradigms"></a>
 
@@ -46,11 +53,111 @@ immutable Models and Records that include automatic versioning and state trackin
 allows for strong cohesion between data and logic.
 
 [Return to top](#pattern-programming-language)
+<a name="Projections"></a>
+
+### Projections
+
+<a name="statements"></a>
+
+#### Statements
+
+All collections may have the following projections applied
+to them via IEnumerable<T>.
+
+* `ForEach` - Iterates over each value of the collection and calls
+    the specified `Action<T>` on it.
+* `Select` - Iterates over each value of the collection and calls the 
+    the specified `Function<T,R>` on it.
+* `Filter` - Iterates over each value of the collection and calls the 
+    specified `Expression<T, Boolean>`, returning T when the expression is true.
+* `Exclude` - Iterates over each value collection and calls the specified
+    `Expression<T, Boolean>`, returning T when the expression is false.
+* `Sort` - Iterates over each value and sorts the data using the supplied 
+    Sorter<T> instance, returning the sorted data as a new collection of the
+    same type.
+
+<a name="return-types"></a>
+
+#### Return Types
+
+By default, projections return new collections of the same type as the 
+    collection being projected
+
+* Adding `Into VariableName' to the projection uses the collection in `VariableName`
+    to hold the results of the projection.
+* Adding `Into [VariableName Of] ICollection<T>` to the projection creates a new instance of 
+    the `ICollection<T>` to hold the results.  If a variable name is specified then it is created as a constant and initialized with the collection containing the results.
+* Adding `Into [VariableName Of] IDictionary<TKey, TValue>` to the projection creates a new instance of
+    the `IDictionary<TKey, TValue>` to hold the results.  If a variable name is specified then it is created as a constant and initialized with the collection containing the results.
+
+<a name="examples"></a>
+
+#### Examples
+
+```pattern
+Const values = Array(  0, 1, 2, 3, 4, 5, 6, 7, 8, 9
+                     , 0xA, 0xB, 0xC, 0xD, 0xE, 0xF)
+
+// Block style
+ForEach values
+    value => WriteLine($"{value}")
+End ForEach
+
+// Fluent style
+values.ForEach(value => WriteLine($"{value}"))
+
+// Block style
+Select values Into strings Of Array Of String
+    value => value.ToString()
+End Select
+
+// Fluent style
+const strings =
+    values.Select(value => value.ToString())
+
+// Block Style
+Filter values Into even
+    value => (value % 2 == 0)
+End Filter
+
+// Fluent Style
+const even = 
+    values.Filter(value => (value % 2 == 0))
+
+// even = (0, 2, 4, 6, 8, 0xA, 0xC, 0xE)
+
+// Block Style
+Exclude values Into odd
+    value => (value % 2 == 0)
+End Exclude
+
+// Fluent Style
+const even = 
+    values.Filter(value => (value % 2 == 0))
+
+// odd = (1, 3, 5, 7, 9, 0xB, 0xD, 0xF)
+
+// Block style
+Sort values Into sorted
+    value, target => 
+        Comparer<Number>()
+            .Default
+                .Compare(value, target)
+End Sort
+
+// Fluent Style
+Const sorted =
+    values.Sort(Comparer<Number>());
+```
+
+[Return to top](#pattern-programming-language)
 <!-- /include -->
 <!-- include (language/Language-Definition.md) -->
 <a name="language-definition"></a>
 
 ## Language Definition
+
+[Return to top](#pattern-programming-language)
 
 <a name="pattern-keywords"></a>
 
@@ -344,8 +451,6 @@ The `CompareType` enumeration contains simple comparisons that can be used
 <a name="Pattern-Types"></a>
 
 ### Pattern Types
-
-[Return to top](#pattern-programming-language)
 <!-- /include -->
 <!-- include (examples/Examples.md) -->
 <a name="language-examples"></a>
@@ -533,6 +638,179 @@ Injection Set MyDependencies
     Register PersonView Controlled By PersonController
 End MyDependencies
 ```
+<!-- /include -->
+<!-- include (samples/Samples.md) -->
+<a name="sample-programs"></a>
+
+## Sample Programs
+
+[Return to top](#pattern-programming-language)
+
+* [Hello World](#hello-world-sample)
+* [Array Sample](#array-sample)
+* [Gating Sample](#gating-sample)
+
+<a name="hello-world-sample"></a>
+
+### Hello World Sample
+```pattern
+Application Scope PatternLang
+
+Needs Static System.Console
+
+Application HelloWorld
+    Start
+        WriteLine("Hello, World.")    
+    End Start
+End HelloWorld
+
+```
+
+[Return to Samples](#sample-programs)
+
+
+<a name="array-sample"></a>
+
+### Array Sample
+```pattern
+Application Scope PatternLang
+
+Needs Static System.Console
+
+Application Array
+    Start
+        Parameter args Of Array Of String
+        
+        Match args.Length
+            0 |> _ => WriteLine("No input provided.")
+            1 |> _ => WriteLine(args.First)
+            2 |> _ => WriteLine(args.Last)
+            Some |> 
+                (length) => 
+                Lambda
+                    WriteLine($"{length} arguments provided on command line.")
+                    WriteLine(args.Find("Hello", CompareType.StartsWith))
+                
+                    Match args.Filter("Hello", CompareType.StartsWith)
+                        "Hello, World" |> (match) => WriteLine("Hello, World with comma.")
+                        "Hello World" |> (match) => WriteLine("Hello World without comma.")
+                        Some |> (matches) => matches.ForEach(match => WriteLine(match))
+                        None |> _ => WriteLine("Nothing to include.")
+                    
+                
+                    Match args.Exclude("Hello", CompareType.StartsWith)
+                        Some |> (matches) => matches.ForEach(match => WriteLine(match))
+                        None |> _ => WriteLine("Nothing to exclude.")
+                    
+                End Lambda
+            None |> WriteLine("args is not defined.")
+    End Start
+End Array
+
+```
+
+[Return to Samples](#sample-programs)
+
+<a name="gating-sample"></a>
+
+### Gating Sample
+```pattern
+Application Scope PatternLang
+
+Needs Static System.Console
+
+Application Gating
+    Const _filename = "-Filename"
+    Const _action = "-Action"
+
+    // Specifying Array because default notation of (_filename, _action)
+    // would be interpreted as a Pair.
+    Const _validParameters = Array(_filename, _action)
+
+    // Our entry point method
+    Start
+        Parameters args Of Array Of String
+
+        Const parameters = ParseParameters(args)
+
+        // Validity requires there be only two parameters, one for -Filename
+        // and one for -Action
+        Const hasValidParameters = 
+            // The Find and Exclude methods will project over any collection passed as the first argument
+            parameters.Find(_validParameters, CompareType.Equals).Length == _validParameters.Length            
+            && parameters.Exclude(_validParameters, CompareType.Equals).Length == 0
+
+        // Match is used to compare values, whether they are atomic or a collection.
+        // In the event of a collection, the collection is enumerated and the 
+        // matched value is the value of the current iteration.
+        Match hasValidParameters
+                    // The parameter to the Action is always the value that was matched
+            true |> _ => parameters.ForEach(p => WriteLine($"{p.Key}: {p.Value}"))
+            false |> _ =>
+                Match parameters
+                    Some |> p =>
+                        Match p.Key
+                            _filename |> _ => WriteLine($"Filename: {p.Value}")
+                            _action |> _ => WriteLine($"Action: {p.Value}")
+                            Some |> _ => WriteLine($"Unknown parameter: {p}")
+                            None |> _ => WriteLine($"Missing Key for ({p.Value})")
+
+                    None |> _ => WriteLine("No parameters provided.")
+
+            None |> Continue
+
+    End Start
+
+    Method ParseParameters Of Array Of Pair(Key Of String, Value of String)
+        Parameters args of Array of String
+
+        Mutable results Array of Pair(Key of String, Value of String)
+        Mutable word Of String
+
+        Match args
+            // Matches only the values that start with "-"
+            ("-", CompareType.StartsWith) |> parameter => 
+                    Match parameter
+                        (":", CompareType.Contains)
+                        ("=", CompareType.Contains)
+                            |>  Action _ =>                                 
+                                    Const split = parameter.Split(":").ForEach(p => p.Trim)
+                                    result.Add((Key = split(0), Value = split(1))
+                                    word = None 
+                                End Action
+                        Some |> Action _ => 
+                                    Match word
+                                        Some |> _ => result.Add((Key = word, Value = None))
+                                        None |> Continue
+
+                                    word = parameter
+                                End Action
+                                
+                        None |> Continue
+
+            // Matches all values that don't start with "-"
+            Some |> parameter =>
+                    Match word
+                        Some |> Action _ =>                             
+                                    result.Add((Key = word, Value = parameter))
+                                    word = None
+                                End Action
+                        None |> Continue
+
+            // The args collection is empty.
+            None |> Continue
+
+        Match word
+            Some |> _ => result.Add((Key = word, Value = None))
+            None |> Continue
+
+        Return results
+    End ParseParameters
+End Gating
+
+```
+
+[Return to Samples](#sample-programs)
 <!-- /include -->
 <!-- include (footer.md) -->
 [Return to top](#pattern-programming-language)

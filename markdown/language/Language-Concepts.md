@@ -2,6 +2,7 @@
 
 ## Language Concepts
 
-!include(Language-Paradigms.md)
-
 [Return to top](#pattern-programming-language)
+
+!include(Language-Paradigms.md)
+!include(Projections.md)
