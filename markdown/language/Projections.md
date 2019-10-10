@@ -24,7 +24,7 @@ to them via IEnumerable<T>.
 By default, projections return new collections of the same type as the 
     collection being projected
 
-* Adding `Into VariableName' to the projection uses the collection in `VariableName`
+* Adding `Into VariableName` to the projection uses the collection in `VariableName`
     to hold the results of the projection.
 * Adding `Into [VariableName Of] ICollection<T>` to the projection creates a new instance of 
     the `ICollection<T>` to hold the results.  If a variable name is specified then it is created as a constant and initialized with the collection containing the results.
@@ -77,7 +77,7 @@ End Exclude
 
 // Fluent Style
 const even = 
-    values.Filter(value => IsEven(value))
+    values.Exclude(value => IsEven(value))
 
 // odd = (1, 3, 5, 7, 9, 0xB, 0xD, 0xF)
 

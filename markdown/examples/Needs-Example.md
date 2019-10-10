@@ -9,3 +9,13 @@ of a library of dependent code.
 Needs Pattern
 Needs Pattern::Collections
 ```
+The `Static` modifier on `Needs` adds the public Methods of the specified static object to the current namespace.
+
+```pattern
+Needs Static System:>Console
+
+    // later in the code
+
+    // Call Console.WriteLine
+    WriteLine("Some text.")
+```

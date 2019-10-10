@@ -1,5 +1,7 @@
 <a name="BasicTypes"></a>
 
+[Return to top](#pattern-programming-language)
+
 ### Basic Types
 
 * [Type](#Type-Type)

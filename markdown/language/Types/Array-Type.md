@@ -62,12 +62,12 @@ An `Array` of `Pair` instances may use the same `Find`, `Filter` and `Exclude`
 
 ```pattern
     // Define an Array of Pair using an Array initializer
-    Const values = Array() Of Pair(Value Of Number, Key of String)
-    {
-        Pair(Value = 20, Key = "Twenty"),
-        Pair(Value = 100, Key = "One Hundred"),
-        Pair(Value = -20, Key = "Negative Twenty")
-    }
+    Const values = Array Of Pair(Value Of Number, Key of String)
+    (
+        (Value = 20, Key = "Twenty"),
+        (Value = 100, Key = "One Hundred"),
+        (Value = -20, Key = "Negative Twenty")
+    )
 
     Const twoHundred = values.Find("One Hundred")
     // twoHundred is Pair.Value = 100

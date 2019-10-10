@@ -10,8 +10,8 @@
     * [Projections](#Projections)
   * [Language Definition](#language-definition)
     * [Pattern Keywords](#pattern-keywords)
-    * [Basic Types](#BasicTypes)
-    * [Pattern Types](#Pattern-Types)
+    * [Basic Types](#basic-types)
+    * [Pattern Types](#pattern-types)
   * [Language Examples](#language-examples)
     * [Pattern Keyword Examples](#pattern-keyword-examples)
     * [Pattern Types Examples](#pattern-types-examples)
@@ -83,7 +83,7 @@ to them via IEnumerable<T>.
 By default, projections return new collections of the same type as the 
     collection being projected
 
-* Adding `Into VariableName' to the projection uses the collection in `VariableName`
+* Adding `Into VariableName` to the projection uses the collection in `VariableName`
     to hold the results of the projection.
 * Adding `Into [VariableName Of] ICollection<T>` to the projection creates a new instance of 
     the `ICollection<T>` to hold the results.  If a variable name is specified then it is created as a constant and initialized with the collection containing the results.
@@ -138,7 +138,7 @@ End Exclude
 
 // Fluent Style
 const even = 
-    values.Filter(value => IsEven(value))
+    values.Exclude(value => IsEven(value))
 
 // odd = (1, 3, 5, 7, 9, 0xB, 0xD, 0xF)
 
@@ -168,16 +168,21 @@ Const sorted =
 
 ### Pattern Keywords
 
+[Return to top](#pattern-programming-language)
+
 * [Application Scope](#Application-Scope-Keyword)
 * [Needs](#Needs-Keyword)
 * [Application](#Application-Keyword)
 * [End](#End-Keyword)
 * [Register](#Register-Keyword)
 
-[Return to top](#pattern-programming-language)
 <a name="Types"></a>
 
 <a name="BasicTypes"></a>
+
+[Return to top](#pattern-programming-language)
+
+<a name="basic-types"></a>
 
 ### Basic Types
 
@@ -429,12 +434,12 @@ An `Array` of `Pair` instances may use the same `Find`, `Filter` and `Exclude`
 
 ```pattern
     // Define an Array of Pair using an Array initializer
-    Const values = Array() Of Pair(Value Of Number, Key of String)
-    {
-        Pair(Value = 20, Key = "Twenty"),
-        Pair(Value = 100, Key = "One Hundred"),
-        Pair(Value = -20, Key = "Negative Twenty")
-    }
+    Const values = Array Of Pair(Value Of Number, Key of String)
+    (
+        (Value = 20, Key = "Twenty"),
+        (Value = 100, Key = "One Hundred"),
+        (Value = -20, Key = "Negative Twenty")
+    )
 
     Const twoHundred = values.Find("One Hundred")
     // twoHundred is Pair.Value = 100
@@ -453,9 +458,119 @@ The `CompareType` enumeration contains simple comparisons that can be used
     when filtering, finding or excluding data from a `Tree`, `Array` or other
     collection.
 
-<a name="Pattern-Types"></a>
+[Return to top](#pattern-programming-language)
+
+<a name="pattern-types"></a>
 
 ### Pattern Types
+
+* [Strategy Pattern](#strategy-pattern-example)
+* [Singleton Pattern](#singleton-pattern-example)
+
+<a name="strategy-pattern-example"></a>
+
+#### Strategy Pattern Example
+
+```pattern
+Application Scope PatternExamples
+
+Needs Static System:>Console
+
+Application StrategyExample
+    Const BookReader = BookStrategy()
+
+    Start
+        Parameter args Of Array Of String
+
+        Match Enum.Parse(args(0))
+            (Hardback, Kindle) |> 
+                format => WriteLine(BookReader.Read(format, 1, 1))
+            
+            None |> WriteLine("Invalid book format.")
+
+    End Start
+End StrategyExample
+
+Strategy BookStrategy
+        Strategies.Add(HardbackStrategy, KindleStrategy)
+    End Constructor
+
+    Method StrategySelector Of BookStrategy
+        Parameter format Of BookFormat
+
+        Return Strategies.First(strategy => strategy.Format == format)
+    End StrategySelector
+    
+    Method Read Of String
+        Parameter format Of BookFormat
+        Parameter firstPage Of Number
+        Parameter pageCount Of Number
+
+        Return Match StrategySelector(format)
+            Some |> strategy => strategy.Read(firstPage, pageCount)
+            None |> Continue            
+    End Read
+End BookStrategy
+
+BookStrategy HardbackStrategy
+    Const Format = BookFormat.Hardback
+    Method Read Of String 
+        Parameter FirstPage Of Number
+        Parameter PageCount Of Number
+
+        // Get the data from the hardback book
+        Return "..."
+    End Read
+End HardbackStrategy
+
+BookStrategy KindleStrategy
+    Const Format = BookFormat.Kindle
+    Method Read Of String 
+        Parameter FirstPage Of Number
+        Parameter PageCount Of Number
+
+        // Get the data from the Kindle archive
+        Return "..."
+    End Read
+End HardbackStrategy
+```
+<a name="singleton-pattern-example"></a>
+
+#### Singleton Pattern Example
+
+```pattern
+Singleton SomeState
+        cache = ConcurrentDictionary<Of Guid, Of String>()
+        logger = Injectibles(ILogger)
+    End Constructor
+
+    Private Const logger Of ILogger;
+    Private Const cache Of ConcurrentDictionary<Of Guid, Of String>
+
+    Public Method AddOrUpdate
+        Parameter key Of Guid
+        Parameter value Of String
+
+        Cache.AddOrUpdate(key, value, (k,v) => value)
+    End Add
+
+    Public Method AddOrUpdate
+        Parameter data Of Pair(Key Of Guid, Value Of String)
+
+        Cache.AddOrUpdate(data.key, data.value, (k,v) => data.value)
+    End Add
+
+    Public Method Locate of Pair(Key of Guid, Value of String)
+        Parameter key Of Guid
+
+        Match cache Into Result of Pair(Key of Guid, Value of String)
+            Key == key |> item => Break (item.Key, item.Value)
+            None |> Continue
+
+        Return Result
+    End Locate
+End SomeState
+```
 <!-- /include -->
 <!-- include (examples/Examples.md) -->
 <a name="language-examples"></a>
@@ -507,6 +622,16 @@ of a library of dependent code.
 ```pattern
 Needs Pattern
 Needs Pattern::Collections
+```
+The `Static` modifier on `Needs` adds the public Methods of the specified static object to the current namespace.
+
+```pattern
+Needs Static System:>Console
+
+    // later in the code
+
+    // Call Console.WriteLine
+    WriteLine("Some text.")
 ```
 
 <a name="application-keyword"></a>
