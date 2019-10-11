@@ -27,7 +27,7 @@ Application Gating
         // In the event of a collection, the collection is enumerated and the 
         // matched value is the value of the current iteration.
         Match hasValidParameters
-                    // The parameter to the lambda is always the value that was matched
+                    // The parameter to the Lambda is always the value that was matched
             true |> _ => parameters.ForEach(p => WriteLine($"{p.Key}: {p.Value}"))
             false |> _ =>
                 Match parameters
@@ -46,47 +46,48 @@ Application Gating
 
     Method ParseParameters Of Array Of Pair(Key Of String, Value of String)
         Parameters args of Array of String
-
+    
         Mutable results Array of Pair(Key of String, Value of String)
         Mutable word Of String
 
         Match args
             // Matches only the values that start with "-"
-            ("-", CompareType.StartsWith) |> parameter => 
+            ("-", CompareType.StartsWith) |> 
+                parameter =>
                     Match parameter
-                        (":", CompareType.Contains)
-                        ("=", CompareType.Contains)
-                            |>  Lambda _ =>                                 
-                                    Const split = parameter.Split(":").ForEach(p => p.Trim)
-                                    result.Add((Key = split(0), Value = split(1))
-                                    word = None 
-                                End Lambda
-                        Some |> Lamba _ => 
-                                    Match word
-                                        Some |> _ => result.Add((Key = word, Value = None))
-                                        None |> Continue
-
-                                    word = parameter
-                                End Lambda
-                                
-                        None |> Continue
-
+                    (":", CompareType.Contains)
+                    ("=", CompareType.Contains)
+                        |>  Action _ =>
+                            Const split = parameter.Split(Array(':','"'))
+                                .ForEach(p => p.Trim)
+                            result.Add((Key = split(0), Value = split(1))
+                            word = None
+                            End Action
+                    Some |> Action _ =>
+                            Match word
+                                Some |> _ => 
+                                        result.Add((Key = word, Value = None))
+                                None |> Continue
+                            
+                            word = parameter
+                            End Action
+                    None |> Continue
             // Matches all values that don't start with "-"
             Some |> parameter =>
                     Match word
-                        Some |> Lambda _ =>                             
-                                    result.Add((Key = word, Value = parameter))
-                                    word = None
-                                End Lambda
-                        None |> Continue
-
+                    Some |> Action _ =>
+                                result.Add((Key = word, Value = parameter))
+                                word = None
+                            End Action
+                    None |> Continue
+            
             // The args collection is empty.
             None |> Continue
-
+        
         Match word
             Some |> _ => result.Add((Key = word, Value = None))
             None |> Continue
-
+        
         Return results
     End ParseParameters
 End HelloWorld
