@@ -1,6 +1,6 @@
 Application Scope PatternLang
 
-Needs Static System.Console
+Needs Static System:>Console
 
 Application Gating
     Const _filename = "-Filename"

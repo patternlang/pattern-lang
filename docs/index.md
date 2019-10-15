@@ -786,7 +786,7 @@ End MyDependencies
 ```pattern
 Application Scope PatternLang
 
-Needs Static System.Console
+Needs Static System:>Console
 
 Application HelloWorld
     Start
@@ -805,7 +805,7 @@ End HelloWorld
 ```pattern
 Application Scope PatternLang
 
-Needs Static System.Console
+Needs Static System:>Console
 
 Application Array
     Start
@@ -816,8 +816,7 @@ Application Array
             1 |> _ => WriteLine(args.First)
             2 |> _ => WriteLine(args.Last)
             Some |> 
-                (length) => 
-                Lambda
+                Action (length) =>                 
                     WriteLine($"{length} arguments provided on command line.")
                     WriteLine(args.Find("Hello", CompareType.StartsWith))
                 
@@ -832,7 +831,7 @@ Application Array
                         Some |> (matches) => matches.ForEach(match => WriteLine(match))
                         None |> _ => WriteLine("Nothing to exclude.")
                     
-                End Lambda
+                End Action
             None |> WriteLine("args is not defined.")
     End Start
 End Array
@@ -847,7 +846,7 @@ End Array
 ```pattern
 Application Scope PatternLang
 
-Needs Static System.Console
+Needs Static System:>Console
 
 Application Gating
     Const _filename = "-Filename"
