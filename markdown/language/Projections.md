@@ -9,27 +9,31 @@ to them via IEnumerable<T>.
 
 * `ForEach` - Iterates over each value of the collection and calls
     the specified `Action<T>` on it.
-* `Select` - Iterates over each value of the collection and calls the 
+* `Select` - Iterates over each value of the collection and calls the
     the specified `Function<T,R>` on it.
-* `Filter` - Iterates over each value of the collection and calls the 
+* `Filter` - Iterates over each value of the collection and calls the
     specified `Expression<T, Boolean>`, returning T when the expression is true.
 * `Exclude` - Iterates over each value collection and calls the specified
     `Expression<T, Boolean>`, returning T when the expression is false.
-* `Sort` - Iterates over each value and sorts the data using the supplied 
+* `Sort` - Iterates over each value and sorts the data using the supplied
     `IComparer<T>` instance, returning the sorted data as a new collection of the
     same type.
 
 #### Return Types
 
-By default, projections return new collections of the same type as the 
+By default, projections return new collections of the same type as the
     collection being projected
 
 * Adding `Into VariableName` to the projection uses the collection in `VariableName`
     to hold the results of the projection.
-* Adding `Into [VariableName Of] ICollection<T>` to the projection creates a new instance of 
-    the `ICollection<T>` to hold the results.  If a variable name is specified then it is created as a constant and initialized with the collection containing the results.
-* Adding `Into [VariableName Of] IDictionary<TKey, TValue>` to the projection creates a new instance of
-    the `IDictionary<TKey, TValue>` to hold the results.  If a variable name is specified then it is created as a constant and initialized with the collection containing the results.
+* Adding `Into [VariableName Of] ICollection<T>` to the projection creates a new
+  instance of the `ICollection<T>` to hold the results.  If a variable name is
+  specified then it is created as a constant and initialized with the collection
+  containing the results.
+* Adding `Into [VariableName Of] IDictionary<TKey, TValue>` to the projection
+  creates a new instance of the `IDictionary<TKey, TValue>` to hold the results.
+  If a variable name is specified then it is created as a constant and
+  initialized with the collection containing the results.
 
 #### Examples
 
@@ -65,7 +69,7 @@ Filter values Into even
 End Filter
 
 // Fluent Style
-const even = 
+const even =
     values.Filter(value => IsEven(value))
 
 // even = (0, 2, 4, 6, 8, 0xA, 0xC, 0xE)
@@ -76,14 +80,14 @@ Exclude values Into odd
 End Exclude
 
 // Fluent Style
-const even = 
+const even =
     values.Exclude(value => IsEven(value))
 
 // odd = (1, 3, 5, 7, 9, 0xB, 0xD, 0xF)
 
 // Block style
 Sort values Into sorted
-    value, target => 
+    value, target =>
         Comparer<Number>()
             .Default
                 .Compare(value, target)
