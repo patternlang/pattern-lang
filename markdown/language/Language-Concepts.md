@@ -14,44 +14,51 @@
 * Model
     * Change-State Tracking
         * Triggers
-            * `ModelLoaded` - Fired the first time the Model receives a state change after instantiation.
-            * `ModelReset` - Fired when a Model is pinned to a new base state or reset to existing base state.
-            * `ModelIsDirty(Boolean)` - Fired whenever the state of the IsDirty flag changes.
-            * `ModelChanged(ModelDiff)` - Fired when a trackable state change occurs within the Model.
-            * `ModelPropertyChanged(Property)` - Fired when trackable state change occurs within a Property.
-            * `ModelUndoApplied(ModelDiff)` - Fired when the `UndoLastChange` or `UndoAllChanges` methods
-                are called.
-            * `ModelRedoApplied(ModelDiff)` - Fired when the `RedoLastChange` or `RedoAllChanges` methods
-                are called.
+            * `ModelLoaded` - Fired the first time the `Model` receives a state change after 
+                initialization is complete.
+            * `ModelReset` - Fired when a `Model` is pinned to a new base state or reset to 
+                the existing base state.
+            * `ModelIsDirty(Boolean)` - Fired whenever the state of the `IsDirty` flag changes.
+            * `ModelChanged(ModelDiff)` - Fired when a trackable state change occurs within the `Model`.
+            * `ModelPropertyChanged(Property)` - Fired when trackable state change occurs 
+                within a Property.
+            * `ModelUndoApplied(ModelDiff)` - Fired when the `UndoLastChange` or 
+                `UndoAllChanges` methods are called.
+            * `ModelRedoApplied(ModelDiff)` - Fired when the `RedoLastChange` or 
+                `RedoAllChanges` methods are called.
         * Properties
-            * `IsDirty Of Boolean` - Readonly, managed by change tracking notification Mechanism
+            * `IsDirty Of Boolean` - Readonly, managed by change tracking notification mechanism
             * `UndoStack of Stack Of ModelDiff` - Readonly
             * `RedoStack of Stack Of ModelDiff` - Readonly
         * Methods
             * `SetBaseState()` method - Makes the current state clean and the comparison basis 
-                for the `IsDirty` property.  ModelReset Trigger is fired.
+                for the `IsDirty` property.  `ModelReset` Trigger is fired.
             * `SetBaseState(Model)` method - Makes the current state clean and pushes the values
-                of the accepted Model to the state of the current Model. ModelReset Trigger is Fired
-            * `UndoLastChange()` method - Reverts the last change to the Model and places it on the Redo 
-                stack.  All appropriate state change triggers are fired.
-            * `UndoAllChanges()` method - Reverts the Model to the Base State. ModelReset Trigger is fired.
-            * `RedoLastChange()` method - Applies the last change to the Model.  All appropriate
+                of the accepted `Model` to the state of the current `Model`. `ModelReset` Trigger 
+                is fired
+            * `UndoLastChange()` method - Reverts the last change to the Model and places it on the 
+                `RedoStack`.  All appropriate state change triggers are fired.
+            * `UndoAllChanges()` method - Reverts the `Model` to the base state. `ModelReset` 
+                Trigger is fired.
+            * `RedoLastChange()` method - Applies the last change to the `Model`.  All appropriate
                 state change triggers are fired.
-            * `RedoAllChanges()` method - Applies the Model with all actions in the Redo stack. ModelReset Trigger is fired.
-            * `ResetUndoRedo()` method - Clears the Undo and Redo stacks.
+            * `RedoAllChanges()` method - Applies the `Model` with all actions in the `RedoStack`. 
+                `ModelReset` Trigger is fired.
+            * `ResetUndoRedo()` method - Clears the `UndoStack` and `RedoStack`.
     * Transactional
         * Triggers
-            * `AddedToTransaction(Transaction, Model)` - Fired when the `Model` is added to a `Transaction` 
-                and an immutable snapshot of the `Model` as added to the `Transaction`.
-            * `Committed(Transaction, Model)` - Fired when the `Transaction` is committed and the immutable
-                of the `Model` as added to the transaction.  The app may _choose_ to apply this state as the
-                base state of the `Model` by calling `SetBaseState(Model)`.
-            * `RolledBack(Transaction, Model)` - Fired when the `Transaction` is committed and the immutable
-                of the `Model` as added to the transaction.  The app may _choose_ to apply this state as the
-                base state of the `Model` by calling `SetBaseState(Model)`.
+            * `AddedToTransaction(Transaction, Model)` - Fired when the `Model` is added to a 
+                `Transaction` and an immutable snapshot of the `Model` as added to the `Transaction`.
+            * `Committed(Transaction, Model)` - Fired when the `Transaction` is committed and 
+                the immutable snapshot of the `Model` as added to the transaction.  The app may 
+                _choose_ to apply this state as the base state of the `Model` by calling 
+                `SetBaseState(Model)`.
+            * `RolledBack(Transaction, Model)` - Fired when the `Transaction` is committed and 
+                the immutable of the `Model` as added to the transaction.  The app may _choose_ 
+                to apply this state as the base state of the `Model` by calling `SetBaseState(Model)`.
     * Fields - Non-publicly accessible data.  All changes are tracked.
     * Properties - Publicly accessible data
-        * May declare zero ore more backing fields only acessible by the property.  All changes to 
+        * May declare zero ore more backing fields only accessible by the property.  All changes to 
             backing fields are tracked.
         * May interact with any publicly accessible member or object
         * May interact with Fields on the same Model type (any instance)        
@@ -101,7 +108,7 @@ Model Person
                 False |> _ => Raise ParseException(NameOf(Prefix), $"{value} is not in NamePrefix")
                 None |> _namePrefix = None
             End Match
-        End String
+        End Set
     End Property
 
     Property Prefix Of String
@@ -120,7 +127,7 @@ Model Person
                 False |> _ => Raise ParseException(NameOf(Prefix), $"{value} is not in NamePrefix")
                 None |> _namePrefix = None
             End Match
-        End String
+        End Set
     End Property
 
     Property DisplayName of String
@@ -141,6 +148,7 @@ End Person
     * Validation - Rollup, display and interaction
     * State Watchers - Lambdas that get called on each change notification, can do anything.
 * ViewModel
+    * Composes one or more Models
 * Controller
 
 ##### Topics
