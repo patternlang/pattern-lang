@@ -166,3 +166,5 @@ End Person
 * Cache
 
 #### Facade
+
+* Facade - All members are static
