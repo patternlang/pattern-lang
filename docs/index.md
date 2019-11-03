@@ -259,11 +259,11 @@ Model Person
             Return _namePrefix ? $" {_namePrefix}" : None
         End Get
         Set
-            Property value Of NamePrefix
+            Parameter value Of NamePrefix
             _namePrefix = value
         End Set
         Set
-            Property value Of String
+            Parameter value Of String
             Match value In NamePrefix
                 True |> namePrefixValue => _namePrefix = namePrefixValue
                 False |> _ => Raise ParseException(NameOf(Prefix), $"{value} is not in NamePrefix")
@@ -278,11 +278,11 @@ Model Person
             Return _namePrefix ? $"{_namePrefix} " : None
         End Get
         Set
-            Property value Of NamePrefix
+            Parameter value Of NamePrefix
             _namePrefix = value
         End Set
         Set
-            Property value Of String
+            Parameter value Of String
             Match value In NamePrefix
                 True |> namePrefixValue => _namePrefix = namePrefixValue
                 False |> _ => Raise ParseException(NameOf(Prefix), $"{value} is not in NamePrefix")
