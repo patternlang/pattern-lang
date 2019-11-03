@@ -17,3 +17,5 @@ immutable Models and Records that include automatic versioning and state trackin
 allows for strong cohesion between data and logic.
 
 [Return to top](#pattern-programming-language)
+
+!include(Dependency-Injection.md)
