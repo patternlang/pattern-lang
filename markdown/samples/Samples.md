@@ -14,7 +14,7 @@
 
 ### Array Sample
 !include(start.md)
-!include(Array.pattern)
+!include(Array.pattern.yaml)
 !include(end.md)
 
 ### Gating Sample

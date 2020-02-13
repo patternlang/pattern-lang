@@ -1087,14 +1087,19 @@ End HelloWorld
 
 ### Array Sample
 ```pattern
-Application Scope PatternLang
-
-Needs Static System:>Console
-
-Application Array
-    Start
-        Parameter args Of Array Of String
-        
+ObjectUID: 05d0d005-825a-49c5-8f0f-25bd4aacec5b
+ProjectUID: 3af91fa0-9de3-4f39-9255-c510e46ebaf9
+ApplicationScope: PatternLang
+Needs:
+ - Static System.Console
+Type: Application
+Name: Array
+Constructor:
+    Parameters:
+    - Name: args
+    Type: Array of String
+    Body: |
+        // ## Parse Commands
         Match args.Length
             0 |> _ => WriteLine("No input provided.")
             1 |> _ => WriteLine(args.First)
@@ -1117,8 +1122,6 @@ Application Array
                     
                 End Action
             None |> WriteLine("args is not defined.")
-    End Start
-End Array
 
 ```
 
