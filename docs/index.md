@@ -689,63 +689,63 @@ End SomeState
 * Model
   * Change-State Tracking
     * Triggers
-      * `ModelLoaded` - Fired the first time the `Model` receives a state change after 
+      * `ModelLoaded` - Fired the first time the `Model` receives a state change after
           initialization is complete.
-      * `ModelReset` - Fired when a `Model` is pinned to a new base state or reset to 
+      * `ModelReset` - Fired when a `Model` is pinned to a new base state or reset to
           the existing base state.
       * `ModelIsDirty(Boolean)` - Fired whenever the state of the `IsDirty` flag changes.
       * `ModelChanged(ModelDiff)` - Fired when a trackable state change occurs within the `Model`.
-      * `ModelPropertyChanged(Property)` - Fired when trackable state change occurs 
+      * `ModelPropertyChanged(Property)` - Fired when trackable state change occurs
           within a Property.
-      * `ModelUndoApplied(ModelDiff)` - Fired when the `UndoLastChange` or 
+      * `ModelUndoApplied(ModelDiff)` - Fired when the `UndoLastChange` or
           `UndoAllChanges` methods are called.
-      * `ModelRedoApplied(ModelDiff)` - Fired when the `RedoLastChange` or 
+      * `ModelRedoApplied(ModelDiff)` - Fired when the `RedoLastChange` or
           `RedoAllChanges` methods are called.
     * Properties
       * `IsDirty Of Boolean` - Readonly, managed by change tracking notification mechanism
       * `UndoStack of Stack Of ModelDiff` - Readonly
       * `RedoStack of Stack Of ModelDiff` - Readonly
     * Methods
-      * `SetBaseState()` method - Makes the current state clean and the comparison basis 
+      * `SetBaseState()` method - Makes the current state clean and the comparison basis
           for the `IsDirty` property.  `ModelReset` Trigger is fired.
       * `SetBaseState(Model)` method - Makes the current state clean and pushes the values
-          of the accepted `Model` to the state of the current `Model`. `ModelReset` Trigger 
+          of the accepted `Model` to the state of the current `Model`. `ModelReset` Trigger
           is fired
-      * `UndoLastChange()` method - Reverts the last change to the Model and places it on the 
+      * `UndoLastChange()` method - Reverts the last change to the Model and places it on the
           `RedoStack`.  All appropriate state change triggers are fired.
-      * `UndoAllChanges()` method - Reverts the `Model` to the base state. `ModelReset` 
+      * `UndoAllChanges()` method - Reverts the `Model` to the base state. `ModelReset`
           Trigger is fired.
       * `RedoLastChange()` method - Applies the last change to the `Model`.  All appropriate
           state change triggers are fired.
-      * `RedoAllChanges()` method - Applies the `Model` with all actions in the `RedoStack`. 
+      * `RedoAllChanges()` method - Applies the `Model` with all actions in the `RedoStack`.
           `ModelReset` Trigger is fired.
       * `ResetUndoRedo()` method - Clears the `UndoStack` and `RedoStack`.
   * Transactional
     * Triggers
-      * `AddedToTransaction(Transaction, Model)` - Fired when the `Model` is added to a 
+      * `AddedToTransaction(Transaction, Model)` - Fired when the `Model` is added to a
           `Transaction` and an immutable snapshot of the `Model` as added to the `Transaction`.
-      * `Committed(Transaction, Model)` - Fired when the `Transaction` is committed and 
-          the immutable snapshot of the `Model` as added to the transaction.  The app may 
-          _choose_ to apply this state as the base state of the `Model` by calling 
+      * `Committed(Transaction, Model)` - Fired when the `Transaction` is committed and
+          the immutable snapshot of the `Model` as added to the transaction.  The app may
+          _choose_ to apply this state as the base state of the `Model` by calling
           `SetBaseState(Model)`.
-      * `RolledBack(Transaction, Model)` - Fired when the `Transaction` is committed and 
-          the immutable of the `Model` as added to the transaction.  The app may _choose_ 
+      * `RolledBack(Transaction, Model)` - Fired when the `Transaction` is committed and
+          the immutable of the `Model` as added to the transaction.  The app may _choose_
           to apply this state as the base state of the `Model` by calling `SetBaseState(Model)`.
   * Fields - Non-publicly accessible data.  All changes are tracked.
   * Properties - Publicly accessible data
-    * May declare zero ore more backing fields only accessible by the property.  All changes to 
+    * May declare zero ore more backing fields only accessible by the property.  All changes to
         backing fields are tracked.
     * May interact with any publicly accessible member or object
-    * May interact with Fields on the same Model type (any instance)        
-  * Validation    
+    * May interact with Fields on the same Model type (any instance)
+  * Validation
     * Properties - Attached to the property and may only use the value of the property to
         determine if the rule is satisfied.
-    * Model-wide - Allows for complex validation rules that can use any visible data in the 
+    * Model-wide - Allows for complex validation rules that can use any visible data in the
         application to be part of the decision.
     * Required Groups - Allows declaring a group of Properties that must have a scoped
-        set of presence.  Example, `Model` has properties `A`, `B`, and `C` with `Singular 
-        Presence`.  The `Required Group` is satisfied if and only if only one property of 
-        the group has a value of `Some`.  `Any Presence` would be satisfied if any number 
+        set of presence.  Example, `Model` has properties `A`, `B`, and `C` with `Singular
+        Presence`.  The `Required Group` is satisfied if and only if only one property of
+        the group has a value of `Some`.  `Any Presence` would be satisfied if any number
         of properties in the Required Group has a value of `Some`.
 
 <a name="examples-1"></a>
@@ -767,7 +767,7 @@ Model Person
     Property Surname For _surname
         Is Required
 
-    Property Names For _names        
+    Property Names For _names
 
     Property Prefix Of String
         Backed By _namePrefix Of NamePrefix
@@ -812,14 +812,14 @@ Model Person
             Return Match DisplaySurnameFirst of String
                 True |> _ => $"{Prefix}{_surname}{Suffix}{DisplayComma} {_names.JoinStrings(" ")}"
                 False |> _ => $"{Prefix}{_names._names.JoinStrings(" ")} {_surname}{Suffix}"
-                None |> None                
+                None |> None
             End Match
         End Get
     End FirstName
 End Person
 ```
 
-* View 
+* View
   * Named Models - Models and collections of Models declared on the View
   * Triggers - Calls into the Controller
   * Validation - Rollup, display and interaction
@@ -838,7 +838,7 @@ End Person
 
 #### Strategy
 
-* StartegyRouter
+* StrategyRouter
 * Strategy
 
 <a name="singleton"></a>
@@ -1157,20 +1157,16 @@ Application Gating
         // In the event of a collection, the collection is enumerated and the 
         // matched value is the value of the current iteration.
         Match hasValidParameters
-<<<<<<< HEAD
-                    // The parameter to the Action is always the value that was matched
-=======
                     // The parameter to the Lambda is always the value that was matched
-> > > > > > > origin/draft
-> > > > > > >             true |> _ => parameters.ForEach(p => WriteLine($"{p.Key}: {p.Value}"))
-> > > > > > >             false |> _ =>
-> > > > > > >                 Match parameters
-> > > > > > >                     Some |> p =>
-> > > > > > >                         Match p.Key
-> > > > > > >                             _filename |> _ => WriteLine($"Filename: {p.Value}")
-> > > > > > >                             _action |> _ => WriteLine($"Action: {p.Value}")
-> > > > > > >                             Some |> _ => WriteLine($"Unknown parameter: {p}")
-> > > > > > >                             None |> _ => WriteLine($"Missing Key for ({p.Value})")
+            true |> _ => parameters.ForEach(p => WriteLine($"{p.Key}: {p.Value}"))
+            false |> _ =>
+                Match parameters
+                    Some |> p =>
+                        Match p.Key
+                            _filename |> _ => WriteLine($"Filename: {p.Value}")
+                            _action |> _ => WriteLine($"Action: {p.Value}")
+                            Some |> _ => WriteLine($"Unknown parameter: {p}")
+                            None |> _ => WriteLine($"Missing Key for ({p.Value})")
 
                     None |> _ => WriteLine("No parameters provided.")
 
@@ -1189,34 +1185,6 @@ Application Gating
             ("-", CompareType.StartsWith) |> 
                 parameter =>
                     Match parameter
-<<<<<<< HEAD
-                        (":", CompareType.Contains)
-                        ("=", CompareType.Contains)
-                            |>  Action _ =>                                 
-                                    Const split = parameter.Split(":").ForEach(p => p.Trim)
-                                    result.Add((Key = split(0), Value = split(1))
-                                    word = None 
-                                End Action
-                        Some |> Action _ => 
-                                    Match word
-                                        Some |> _ => result.Add((Key = word, Value = None))
-                                        None |> Continue
-
-                                    word = parameter
-                                End Action
-                                
-                        None |> Continue
-
-            // Matches all values that don't start with "-"
-            Some |> parameter =>
-                    Match word
-                        Some |> Action _ =>                             
-                                    result.Add((Key = word, Value = parameter))
-                                    word = None
-                                End Action
-                        None |> Continue
-
-=======
                     (":", CompareType.Contains)
                     ("=", CompareType.Contains)
                         |>  Action _ =>
@@ -1243,17 +1211,16 @@ Application Gating
                             End Action
                     None |> Continue
             
-> > > > > > > origin/draft
-> > > > > > >             // The args collection is empty.
-> > > > > > >             None |> Continue
-> > > > > > >         
-> > > > > > >         Match word
-> > > > > > >             Some |> _ => result.Add((Key = word, Value = None))
-> > > > > > >             None |> Continue
-> > > > > > >         
-> > > > > > >         Return results
-> > > > > > >     End ParseParameters
-> > > > > > > End Gating
+            // The args collection is empty.
+            None |> Continue
+        
+        Match word
+            Some |> _ => result.Add((Key = word, Value = None))
+            None |> Continue
+        
+        Return results
+    End ParseParameters
+End Gating
 
 ```
 
@@ -1264,7 +1231,7 @@ Application Gating
 
 ---
 
-> **Copyright 2018 - 2019 Gateway Programming School, Inc.**
+> **Copyright 2018 - 2022 Gateway Programming School, Inc.**
 > 
 > Redistribution and use in source and binary forms, with or without modification,
 > are permitted provided that the following conditions are met:

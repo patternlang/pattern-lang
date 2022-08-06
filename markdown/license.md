@@ -1,4 +1,4 @@
-> **Copyright 2018 - 2019 Gateway Programming School, Inc.**
+> **Copyright 2018 - 2022 Gateway Programming School, Inc.**
 >
 > Redistribution and use in source and binary forms, with or without modification,
 > are permitted provided that the following conditions are met:
