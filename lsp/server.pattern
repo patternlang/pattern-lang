@@ -1,0 +1,88 @@
+Application Scope LSP
+
+Needs Static System:>Console
+Needs Static System.Diagnostics:>Process
+Needs Static System.Diagnostics:>ProcessStartInfo
+Needs Static System.Collections.Generic:>Dictionary
+Needs Static System.Text.Json:>JsonSerializer
+Needs Static System.Text.Json:>JsonDocument
+
+Application LanguageServer
+    Mutable _handlers Of Dictionary Of String, Action
+    Mutable _running Of Boolean = True
+    
+    Start
+        Parameter args Of Array Of String
+        
+        InitializeHandlers()
+        
+        While _running
+            Mutable line Of String = Console.ReadLine()
+            
+            Match line
+                Some |> input => ProcessMessage(input)
+                None |> _running = False
+        End While
+        
+    End Start
+    
+    Method InitializeHandlers
+        _handlers = Dictionary()
+        _handlers.Add("initialize", HandleInitialize)
+        _handlers.Add("shutdown", HandleShutdown)
+        _handlers.Add("textDocument/didOpen", HandleDidOpen)
+    End InitializeHandlers
+    
+    Method HandleInitialize
+        Const response = JsonObject()
+        response.Add("capabilities", JsonObject())
+        SendResponse(response)
+    End HandleInitialize
+    
+    Method HandleShutdown
+        _running = False
+    End HandleShutdown
+    
+    Method HandleDidOpen
+        Parameter message Of JsonObject
+        WriteLine("Document opened")
+    End HandleDidOpen
+    
+    Method ProcessMessage
+        Parameter message Of String
+        
+        Match message
+            Some |> msg =>
+                Const doc = JsonDocument.Parse(msg)
+                Const method = doc.RootElement.GetProperty("method").GetString()
+                
+                Match _handlers.ContainsKey(method)
+                    True |> _ => _handlers(method).Invoke()
+                    False |> _ => WriteLine($"Unknown method: {method}")
+            None |> Continue
+    End ProcessMessage
+    
+    Method SendResponse
+        Parameter response Of JsonObject
+        Const json = JsonSerializer.Serialize(response)
+        WriteLine(json)
+    End SendResponse
+    
+    Method RunExternalProcess Of String
+        Parameter command Of String
+        Parameter arguments Of String
+        
+        Const startInfo = ProcessStartInfo()
+        startInfo.FileName = command
+        startInfo.Arguments = arguments
+        startInfo.RedirectStandardOutput = True
+        startInfo.UseShellExecute = False
+        
+        Const process = Process.Start(startInfo)
+        Const output = process.StandardOutput.ReadToEnd()
+        process.WaitForExit()
+        
+        Return output
+    End RunExternalProcess
+    
+End LanguageServer
