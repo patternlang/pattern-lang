@@ -10,3 +10,5 @@ scripts/**
 node_modules/**
 **/.eslintrc.json
 **/*.pdb
+!node_modules/vscode-languageclient/
+server/*.pdb

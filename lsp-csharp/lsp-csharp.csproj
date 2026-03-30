@@ -2,9 +2,44 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
-    <RootNamespace>LSP</RootNamespace>
+    <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>lsp_csharp</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    
+    <!-- Self-contained deployment configuration -->
+    <RuntimeIdentifiers>win-x64;linux-x64;osx-arm64</RuntimeIdentifiers>
+    
+    <!-- Single file publishing -->
+    <PublishSingleFile>true</PublishSingleFile>
+    <SelfContained>true</SelfContained>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    
+    <!-- Trimming for smaller binaries -->
+    <PublishTrimmed>true</PublishTrimmed>
+    <TrimMode>link</TrimMode>
+    
+    <!-- Optimization -->
+    <PublishReadyToRun>false</PublishReadyToRun>
   </PropertyGroup>
+
+  <!-- Post-build target to copy binaries to extension/server/ directory -->
+  <Target Name="CopyToExtensionServer" AfterTargets="Publish">
+    <PropertyGroup>
+      <ExtensionServerDir>$(MSBuildProjectDirectory)\..\extension\server\</ExtensionServerDir>
+    </PropertyGroup>
+    
+    <MakeDir Directories="$(ExtensionServerDir)" />
+    
+    <ItemGroup>
+      <PublishedFiles Include="$(PublishDir)**\*" />
+    </ItemGroup>
+    
+    <Copy SourceFiles="@(PublishedFiles)" 
+          DestinationFolder="$(ExtensionServerDir)%(RecursiveDir)" 
+          SkipUnchangedFiles="true" />
+    
+    <Message Text="Copied published binaries to $(ExtensionServerDir)" Importance="high" />
+  </Target>
 
 </Project>

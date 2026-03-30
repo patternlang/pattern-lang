@@ -1,12 +1,12 @@
 {
-  "name": "pattern-language-support",
+  "name": "pattern-lang",
   "displayName": "Pattern Language Support",
   "description": "Language support for Pattern language with LSP integration",
   "version": "0.0.1",
   "publisher": "pattern-lang",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/pattern-lang"
+    "url": "https://github.com/patternlang/pattern-lang"
   },
   "engines": {
     "vscode": "^1.75.0"
@@ -15,7 +15,8 @@
     "Programming Languages"
   ],
   "activationEvents": [
-    "onLanguage:pattern"
+    "onLanguage:pattern",
+    "onLanguage:csharp"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -24,6 +25,10 @@
         "id": "pattern",
         "extensions": [".pattern"],
         "aliases": ["Pattern", "pattern"]
+      },
+      {
+        "id": "csharp",
+        "extensions": [".cs"]
       }
     ]
   },
@@ -33,16 +38,19 @@
     "watch": "tsc -watch -p ./",
     "pretest": "npm run compile",
     "copy-lsp": "node scripts/copy-lsp.js",
+    "package:lsp": "node -e \"const fs=require('fs'); const path=require('path'); const dest=path.join(__dirname,'server'); if(!fs.existsSync(dest)) fs.mkdirSync(dest,{recursive:true}); const patterns=['lsp-csharp','lsp-csharp.exe']; const searchDirs=[path.join(__dirname,'..'),path.join(__dirname,'..','bin'),path.join(__dirname,'..','build')]; for(const dir of searchDirs){if(fs.existsSync(dir)){const files=fs.readdirSync(dir,{recursive:true,withFileTypes:true}).filter(f=>f.isFile()&&patterns.some(p=>f.name===p)); for(const file of files){const src=path.join(file.path||dir,file.name); const dst=path.join(dest,file.name); fs.copyFileSync(src,dst); fs.chmodSync(dst,0o755); console.log('Copied',src,'to',dst);}}}\"",
     "build": "npm run compile && npm run copy-lsp",
-    "package": "npm run build && vsce package"
-  },
-  "dependencies": {
-    "vscode-languageclient": "^9.0.1"
+    "package": "npm run build && vsce package",
+    "package:vsix": "vsce package",
+    "deploy:local": "code --install-extension pattern-lang-*.vsix --force"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
     "@types/vscode": "^1.75.0",
     "typescript": "^5.3.0",
     "@vscode/vsce": "^2.22.0"
+  },
+  "dependencies": {
+    "vscode-languageclient": "^9.0.1"
   }
 }
