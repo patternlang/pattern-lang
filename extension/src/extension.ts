@@ -1,21 +1,22 @@
 import * as path from 'path';
 import * as os from 'os';
-import { workspace, ExtensionContext, window } from 'vscode';
+import * as vscode from 'vscode';
 import {
     LanguageClient,
     LanguageClientOptions,
     ServerOptions,
+    Executable,
     TransportKind
 } from 'vscode-languageclient/node';
 
 let client: LanguageClient;
 
-export function activate(context: ExtensionContext) {
+export function activate(context: vscode.ExtensionContext) {
     const serverExecutable = getServerExecutable(context);
     
     if (!serverExecutable) {
         const errorMsg = 'Failed to determine the appropriate LSP server executable for this platform';
-        window.showErrorMessage(errorMsg);
+        vscode.window.showErrorMessage(errorMsg);
         throw new Error(errorMsg);
     }
 
@@ -31,23 +32,26 @@ export function activate(context: ExtensionContext) {
     };
 
     const clientOptions: LanguageClientOptions = {
-        documentSelector: [{ scheme: 'file', language: 'csharp' }],
+        documentSelector: [
+            { scheme: 'file', language: 'pattern' },
+            { scheme: 'file', language: 'csharp' }
+        ],
         synchronize: {
-            fileEvents: workspace.createFileSystemWatcher('**/*.cs')
+            fileEvents: vscode.workspace.createFileSystemWatcher('**/*.{pattern,cs}')
         }
     };
 
     try {
         client = new LanguageClient(
-            'csharpLanguageServer',
-            'C# Language Server',
+            'patternLanguageServer',
+            'Pattern Language Server (C# LSP)',
             serverOptions,
             clientOptions
         );
 
         client.start().catch((error) => {
-            const errorMsg = `Failed to start C# Language Server: ${error.message}`;
-            window.showErrorMessage(errorMsg);
+            const errorMsg = `Failed to start Pattern Language Server: ${error.message}`;
+            vscode.window.showErrorMessage(errorMsg);
             console.error(errorMsg, error);
         });
 
@@ -59,8 +63,8 @@ export function activate(context: ExtensionContext) {
             }
         });
     } catch (error) {
-        const errorMsg = `Error initializing C# Language Server: ${error instanceof Error ? error.message : String(error)}`;
-        window.showErrorMessage(errorMsg);
+        const errorMsg = `Error initializing Pattern Language Server: ${error instanceof Error ? error.message : String(error)}`;
+        vscode.window.showErrorMessage(errorMsg);
         console.error(errorMsg, error);
         throw error;
     }
@@ -73,7 +77,7 @@ export function deactivate(): Thenable<void> | undefined {
     return client.stop();
 }
 
-function getServerExecutable(context: ExtensionContext): string | null {
+function getServerExecutable(context: vscode.ExtensionContext): string | null {
     const platform = os.platform();
     
     let serverBinary: string;

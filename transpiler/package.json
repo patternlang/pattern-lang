@@ -1,0 +1,20 @@
+{
+  "name": "pattern-lang-transpiler",
+  "version": "1.0.0",
+  "description": "Transpiler for Pattern Language to C#",
+  "main": "cli.js",
+  "scripts": {
+    "test": "node test_load.js"
+  },
+  "dependencies": {
+    "js-yaml": "^4.1.0",
+    "peggy": "^1.2.0"
+  },
+  "keywords": [
+    "transpiler",
+    "pattern-lang",
+    "csharp"
+  ],
+  "author": "",
+  "license": "MIT"
+}

@@ -1,0 +1,84 @@
+Application Scope LSP
+
+Needs Static System:>Console
+Needs Static System.Diagnostics:>Process
+Needs Static System.Diagnostics:>ProcessStartInfo
+Needs Static System.Collections.Generic:>Dictionary
+Needs Static System.Text.Json:>JsonSerializer
+Needs Static System.Text.Json:>JsonDocument
+
+Application LanguageServer
+    Mutable _handlers Of Dictionary Of String, String
+    Mutable _running Of Boolean = True
+    
+    Start
+        Parameter args Of Array Of String
+        
+        InitializeHandlers()
+        
+        While _running
+            Mutable line Of String = Console.ReadLine()
+            
+            Match line
+                Some => ProcessMessage(line)
+                None => _running = False
+            End Match
+        End While
+        
+    End Start
+    
+    Method InitializeHandlers
+        _handlers = Dictionary()
+    End InitializeHandlers
+    
+    Method ProcessMessage
+        Parameter message Of String
+        
+        Match message
+            Some => HandleMessage(message)
+            None => Continue
+        End Match
+    End ProcessMessage
+    
+    Method HandleMessage
+        Parameter msg Of String
+        Const doc = JsonDocument.Parse(msg)
+        Const method = doc.RootElement.GetProperty("method").GetString()
+        
+        Match method
+            "initialize" => SendInitializeResponse()
+            "shutdown" => HandleShutdown()
+            "textDocument/didOpen" => HandleDidOpen()
+        End Match
+    End HandleMessage
+    
+    Method SendInitializeResponse
+        WriteLine("Initialize response sent")
+    End SendInitializeResponse
+    
+    Method HandleShutdown
+        _running = False
+    End HandleShutdown
+    
+    Method HandleDidOpen
+        WriteLine("Document opened")
+    End HandleDidOpen
+    
+    Method RunExternalProcess Of String
+        Parameter command Of String
+        Parameter arguments Of String
+        
+        Const startInfo = ProcessStartInfo()
+        startInfo.FileName = command
+        startInfo.Arguments = arguments
+        startInfo.RedirectStandardOutput = True
+        startInfo.UseShellExecute = False
+        
+        Const process = Process.Start(startInfo)
+        Const output = process.StandardOutput.ReadToEnd()
+        process.WaitForExit()
+        
+        Return output
+    End RunExternalProcess
+    
+End LanguageServer
