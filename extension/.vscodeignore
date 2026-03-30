@@ -1,0 +1,16 @@
+# Source files
+src/
+tsconfig.json
+
+# Git files
+.gitignore
+
+# Source maps
+*.map
+
+# Debug symbols
+server/*.pdb
+
+# Node modules (except vscode-languageclient)
+node_modules/
+!node_modules/vscode-languageclient/
