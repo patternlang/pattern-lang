@@ -1,0 +1,139 @@
+namespaces:
+  System:>Console:
+    using: System
+    static: true
+  System.Diagnostics:>Process:
+    using: System.Diagnostics
+    static: true
+  System.Diagnostics:>ProcessStartInfo:
+    using: System.Diagnostics
+    static: true
+  System.Collections.Generic:>Dictionary:
+    using: System.Collections.Generic
+    static: true
+  System.Text.Json:>JsonSerializer:
+    using: System.Text.Json
+    static: true
+  System.Text.Json:>JsonDocument:
+    using: System.Text.Json
+    static: true
+  System.IO:>File:
+    using: System.IO
+    static: true
+  System.IO:>Directory:
+    using: System.IO
+    static: true
+  System.IO:>Path:
+    using: System.IO
+    static: true
+
+types:
+  String: string
+  Integer: int
+  Boolean: bool
+  Array: List
+  Dictionary: Dictionary
+  JsonObject: JsonObject
+  ProcessStartInfo: ProcessStartInfo
+  Pair: KeyValuePair
+
+modifiers:
+  Public: public
+  Private: private
+  Internal: internal
+  Global: public
+  Shared: static
+  Static: static
+
+keywords:
+  None: null
+  True: true
+  False: false
+  Some: (value != null)
+  And: "&&"
+  Or: "||"
+
+objectTypes:
+  Application: class
+  Model: class
+  Object: class
+  Facade: class
+  Singleton: class
+  Strategy: class
+  Contract: interface
+
+methods:
+  WriteLine:
+    target: Console.WriteLine
+  ReadLine:
+    target: Console.ReadLine
+  Add:
+    target: Add
+  Remove:
+    target: Remove
+  Contains:
+    target: Contains
+  ContainsKey:
+    target: ContainsKey
+  Length:
+    target: Count
+  First:
+    target: First()
+  Last:
+    target: Last()
+  Find:
+    target: Find
+  Filter:
+    target: Where
+  Exclude:
+    target: Where
+  ForEach:
+    target: ForEach
+  Invoke:
+    target: Invoke
+  Parse:
+    target: Parse
+  Serialize:
+    target: Serialize
+  GetProperty:
+    target: GetProperty
+  GetString:
+    target: GetString
+  Split:
+    target: Split
+  Trim:
+    target: Trim
+  Start:
+    target: Start
+  WaitForExit:
+    target: WaitForExit
+  ReadToEnd:
+    target: ReadToEnd
+
+properties:
+  RootElement:
+    target: RootElement
+  FileName:
+    target: FileName
+  Arguments:
+    target: Arguments
+  RedirectStandardOutput:
+    target: RedirectStandardOutput
+  RedirectStandardInput:
+    target: RedirectStandardInput
+  RedirectStandardError:
+    target: RedirectStandardError
+  UseShellExecute:
+    target: UseShellExecute
+  CreateNoWindow:
+    target: CreateNoWindow
+  StandardOutput:
+    target: StandardOutput
+  StandardInput:
+    target: StandardInput
+  StandardError:
+    target: StandardError
+  Key:
+    target: Key
+  Value:
+    target: Value
