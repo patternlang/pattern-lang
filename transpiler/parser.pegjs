@@ -47,10 +47,10 @@ ApplicationScope
 // ===== Needs Statement =====
 
 NeedsStatement
-  = "Needs"i _ static:("Static"i _)? namespace:NamespaceReference _ {
+  = "Needs"i _ isStatic:("Static"i _)? namespace:NamespaceReference _ {
       return {
         type: 'NeedsStatement',
-        static: !!static,
+        static: !!isStatic,
         namespace: namespace
       };
     }

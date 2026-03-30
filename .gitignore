@@ -334,6 +334,8 @@ transpiler/*.js
 transpiler/*.js.map
 transpiler/parser.js
 transpiler/parser.js.map
+!transpiler/cli.js
+!transpiler/test_*.js
 
 # Node.js
 node_modules/
