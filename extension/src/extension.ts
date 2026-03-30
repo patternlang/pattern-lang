@@ -13,11 +13,8 @@ let client: LanguageClient;
 export function activate(context: vscode.ExtensionContext) {
     const serverExecutable = path.join(
         context.extensionPath,
-        '..',
-        'lsp-csharp',
-        'bin',
-        'Debug',
-        'net9.0',
+        'out',
+        'lsp',
         'lsp-csharp.exe'
     );
 
