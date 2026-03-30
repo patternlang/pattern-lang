@@ -348,3 +348,7 @@ lsp/bin/
 lsp/obj/
 lsp/*.dll
 lsp/*.exe
+
+# VS Code Extension Build Artifacts
+extension/out/
+extension/*.vsix
